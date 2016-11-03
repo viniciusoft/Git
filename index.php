@@ -16,6 +16,7 @@
 
 echo "<div class='total'>Relógio de Oração IBR</div></br></br>";
 
+//Arquivo de entrada no formato JSON
 $json = file_get_contents('https://spreadsheets.google.com/feeds/list/1So-FGlrmkfGZjzWAmvfF3P2VB5AoIiClRJCtYPX932Q/default/public/values?alt=json');
 $data = json_decode($json,true);
 
@@ -24,6 +25,7 @@ $terminoHoracao = array();
 
 $totalDePessoas = count($data['feed']['entry']);
 
+//Criação dos arrays de horários e início e término de oração
 for($i=0; $i<$totalDePessoas; $i++) {
 
     if($data['feed']['entry'][$i]['gsx$horáriodeiníciodaoração']['$t'] == "")
@@ -35,6 +37,7 @@ for($i=0; $i<$totalDePessoas; $i++) {
     $inicioHoracaoD = substr($inicioHoracaoDado, 0, 5);
     $terminoHoracaoD = substr($terminoHoracaoDado, 0, 5);
     
+    //Correção do cálculo do horário de 24h (para o horário final)
     if($terminoHoracaoD == "00:00"){
         $terminoHoracaoD = "24:00";
     }
@@ -58,6 +61,7 @@ $matrizFinal = montaMatrizFinal();
 
 echo "<div class='total'>Pessoas cadastradas: <div style='font-size: 2em;'>" . count($inicio_oracao) . "</div></div></br>";
 
+//Criação do array dos horários de oração
 $horariosPreenchidos = preencheHorario($matrizHorarios, $matrizLotes, $matrizFinal, $inicio_oracao);
 
 /*
